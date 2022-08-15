@@ -17,9 +17,6 @@ namespace PRY20220115.Models
         public string? Mail { get; set; }
 
         [Required]
-        public string? Password { get; set; }
-
-        [Required]
         public string? Address { get; set; }
 
         [Required]

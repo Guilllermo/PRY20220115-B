@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\TDP\\PRY20220115-B\\PRY20220115\\PRY20220115.csproj": {}
+    "D:\\Repositorios\\PRY20220115-B\\PRY20220115\\PRY20220115.csproj": {}
   },
   "projects": {
-    "E:\\TDP\\PRY20220115-B\\PRY20220115\\PRY20220115.csproj": {
+    "D:\\Repositorios\\PRY20220115-B\\PRY20220115\\PRY20220115.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\TDP\\PRY20220115-B\\PRY20220115\\PRY20220115.csproj",
+        "projectUniqueName": "D:\\Repositorios\\PRY20220115-B\\PRY20220115\\PRY20220115.csproj",
         "projectName": "PRY20220115",
-        "projectPath": "E:\\TDP\\PRY20220115-B\\PRY20220115\\PRY20220115.csproj",
+        "projectPath": "D:\\Repositorios\\PRY20220115-B\\PRY20220115\\PRY20220115.csproj",
         "packagesPath": "C:\\Users\\blazi\\.nuget\\packages\\",
-        "outputPath": "E:\\TDP\\PRY20220115-B\\PRY20220115\\obj\\",
+        "outputPath": "D:\\Repositorios\\PRY20220115-B\\PRY20220115\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\blazi\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,19 +40,31 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[11.0.1, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[11.0.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.7, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[6.0.6, )"
+              "version": "[6.0.7, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[6.0.6, )"
+              "version": "[6.0.7, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[6.0.6, )"
+              "version": "[6.0.7, )"
             },
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
@@ -60,11 +72,23 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[6.0.6, )"
+              "version": "[6.0.7, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.3.0, )"
+            },
+            "Swashbuckle.AspNetCore.Annotations": {
+              "target": "Package",
+              "version": "[6.3.2, )"
+            },
+            "Swashbuckle.AspNetCore.Filters": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Swashbuckle.AspNetCore.SwaggerUI": {
+              "target": "Package",
+              "version": "[6.3.2, )"
             }
           },
           "imports": [
@@ -85,7 +109,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

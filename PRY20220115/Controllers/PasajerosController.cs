@@ -2,123 +2,132 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PRY20220115.Data;
 using PRY20220115.Models;
+using PRY20220115.Models.Dto;
+using PRY20220115.Repository;
 
 namespace PRY20220115.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PasajerosController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IPasajeroRepository _pasajeroRepository;
+        protected ResponseDto _response;
 
-        public PasajerosController(ApplicationDbContext context)
+        public PasajerosController(IPasajeroRepository pasajeroRepository)
         {
-            _context = context;
+            _pasajeroRepository = pasajeroRepository;
+            _response = new ResponseDto();
         }
 
         // GET: api/Pasajeros
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Pasajero>>> GetPasajeros()
         {
-          if (_context.Pasajeros == null)
-          {
-              return NotFound();
-          }
-            return await _context.Pasajeros.ToListAsync();
+            try
+            {
+                var lista = await _pasajeroRepository.GetPasajeros();
+                _response.Result = lista;
+                _response.Message = "Lista de Pasajeros";
+            }
+            catch (Exception ex)
+            {
+                _response.Success = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };                
+            }
+            return Ok(_response);
         }
 
         // GET: api/Pasajeros/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Pasajero>> GetPasajero(int id)
         {
-          if (_context.Pasajeros == null)
-          {
-              return NotFound();
-          }
-            var pasajero = await _context.Pasajeros.FindAsync(id);
-
-            if (pasajero == null)
+            var pasajero = await _pasajeroRepository.GetPasajeroById(id);
+            if(pasajero == null)
             {
-                return NotFound();
+                _response.Success = false;
+                _response.Message = "Pasajero No Existe";
+                return NotFound(_response);
             }
-
-            return pasajero;
+            _response.Result = pasajero;
+            _response.Message = "Datos del Pasajero";
+            return Ok(_response);
         }
 
         // PUT: api/Pasajeros/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPasajero(int id, Pasajero pasajero)
+        public async Task<IActionResult> PutPasajero(int id, PasajeroDto pasajeroDto)
         {
-            if (id != pasajero.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(pasajero).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                PasajeroDto model = await _pasajeroRepository.CreateUpdate(pasajeroDto);
+                _response.Result = model;
+                return Ok(_response);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!PasajeroExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                _response.Success = false;
+                _response.Message = "Error al Actualizar el Pasajero";
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+                return BadRequest(_response);
             }
-
-            return NoContent();
         }
 
         // POST: api/Pasajeros
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Pasajero>> PostPasajero(Pasajero pasajero)
+        public async Task<ActionResult<Pasajero>> PostPasajero(PasajeroDto pasajeroDto)
         {
-          if (_context.Pasajeros == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Pasajeros'  is null.");
-          }
-            _context.Pasajeros.Add(pasajero);
-            await _context.SaveChangesAsync();
+            try
+            {
+                PasajeroDto model = await _pasajeroRepository.CreateUpdate(pasajeroDto);
+                _response.Result = model;
+                return CreatedAtAction("GetPasajero", new { id = model.Id }, _response);
 
-            return CreatedAtAction("GetPasajero", new { id = pasajero.Id }, pasajero);
+            }
+            catch (Exception ex)
+            {
+                _response.Success = false;
+                _response.Message = "Error al Crear el Pasajero";
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+                return BadRequest(_response);
+            }
         }
 
         // DELETE: api/Pasajeros/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePasajero(int id)
         {
-            if (_context.Pasajeros == null)
+            try
             {
-                return NotFound();
+                bool isDelete = await _pasajeroRepository.DeletePasajero(id);
+                if (isDelete)
+                {
+                    _response.Result = isDelete;
+                    _response.Message = "Pasajero Eliminado con Éxito";
+                    return Ok(_response);
+                }
+                else
+                {
+                    _response.Success = false;
+                    _response.Message = "Error al Eliminar Pasajero";
+                    return BadRequest(_response);
+                }
             }
-            var pasajero = await _context.Pasajeros.FindAsync(id);
-            if (pasajero == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                _response.Success = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+                return BadRequest(_response);
             }
-
-            _context.Pasajeros.Remove(pasajero);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool PasajeroExists(int id)
-        {
-            return (_context.Pasajeros?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

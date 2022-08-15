@@ -11,5 +11,9 @@ namespace PRY20220115.Data
         }
 
         public DbSet<Pasajero>? Pasajeros { get; set; }
+
+        public DbSet<Administrador>? Administradores { get; set; }
+
+        public DbSet<User>? Users { get; set; }
     }
 }
